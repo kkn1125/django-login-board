@@ -1,0 +1,15 @@
+{% with request.session.user as user %}
+<ul class="d-flex gnb nav" style="line-height:1.5">
+    <a class="nav-link" href="{% url 'index' %}">home</a>
+    <span class="nav-link">|</span>
+    {% if user %}
+    <span class="nav-link">{{user.id}}님</span>
+    <span class="nav-link">|</span>
+    <button class="nav-link border-0 bg-white" onclick="signout()">signout</button>
+    {% else %}
+    <a href="{% url 'signin' %}" class="nav-link">sign in</a>
+    <span class="nav-link">|</span>
+    <a class="nav-link" href="{% url 'signup' %}">signup</a>
+    {% endif %}
+</ul>
+{% endwith %}

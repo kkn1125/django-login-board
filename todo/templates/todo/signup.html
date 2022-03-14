@@ -1,0 +1,11 @@
+{% extends './layout.html' %}
+{% load bootstrap5 %}
+{% block content %}
+<h1>Sign up</h1>
+<div>
+    <form action="{% url 'signup' %}" method="post" enctype="multipart/form-data">
+        {% bootstrap_form userForm %}
+        <button class="btn btn-info" type="submit">sign up</button>
+    </form>
+</div>
+{% endblock %}

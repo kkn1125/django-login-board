@@ -1,0 +1,13 @@
+{% extends './layout.html' %}
+{% load bootstrap5 %}
+{% block content %}
+    <h1>Form</h1>
+    <div>
+        <form action="{% if todo == None %}{% url 'todo' %}{% else %}{% url 'control' num=todo.num %}{% endif %}" method="post">
+            <input type="hidden" name="_method" value="put">
+            {% bootstrap_form todoForm %}
+            <button type="submit">add</button>
+            <input type="reset" value="reset">
+        </form>
+    </div>
+{% endblock %}

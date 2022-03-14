@@ -1,0 +1,52 @@
+{% extends './layout.html' %}
+{% load customs %}
+{% block content %}
+<h1>Board</h1>
+<div>
+    <a href="{% url 'form' %}">add</a>
+    {% for todo in todos %}
+    <hr>
+    <div>
+        <div class="d-flex justify-content-between">
+            <h4>{{todo.title}}</h4>
+            <a href="{% url 'edit' num=todo.num %}" class="btn btn-info">✏</a>
+        </div>
+
+        <p>
+            {{todo.content}}
+        </p>
+        <div>
+            {{todo.author}}
+        </div>
+        <div>
+            {% with todo.tags|split:',' as tgs %}
+            {% for tag in tgs %}
+            {{tag}}
+            {% endfor %}
+            {% endwith %}
+        </div>
+        <time>
+            {{todo.start | date:'Y. m. d A h:i'}}
+            |
+            {{todo.end | date:'Y. m. d A h:i'}}
+        </time>
+    </div>
+    <hr>
+    {% endfor %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if todos.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{todos.previous_page_number}}">Previous</a></li>
+            {% endif %}
+
+            {% for page in todos.paginator.page_range %}
+            <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+            {% endfor %}
+
+            {% if todos.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{todos.next_page_number}}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}
