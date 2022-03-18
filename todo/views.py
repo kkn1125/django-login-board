@@ -31,34 +31,35 @@ def list(request):
 
 @api_view(['GET', 'POST'])
 def signin(request):
-    if request.method == 'GET':
-        sign_form = SignForm
-        context = {
-            'signForm': sign_form
-        }
-        return render(request, 'todo/signin.html', context)
-    else:
-        error = '1'
-        success = '1'
-        email = request.POST['email']
-        password = request.POST['password']
-        
-        if User.objects.filter(email=email):
-            user = User.objects.get(email=email)
-            if user.password == password:
-                request.session['user'] = {
-                    'num': user.num,
-                    'id': user.id,
-                    'email': user.email,
-                    'profile': str(user.profile),
-                    'regdate': json.dumps(user.regdate, indent=4, sort_keys=True, default=str),
-                }
-                print(request.session['user'])
-                return redirect('/?succ='+success)
+    if request.method == 'POST':
+        sign_form = SignForm(request.POST)
+        if sign_form.is_valid():
+            email = sign_form.cleaned_data['email']
+            password = sign_form.cleaned_data['password']
+            if '@' not in email:
+                sign_form.add_error('email', '올바른 형식이 아닙니다.')
             else:
-                return redirect('/signin?error='+error)
-        else:
-            return redirect('/signin?error='+error)
+                if User.objects.filter(email=email):
+                    user = User.objects.get(email=email)
+                    if user.password == password:
+                        session_user = user.__dict__.copy()
+                        
+                        del session_user['_state']
+                        del session_user['updates']
+                        
+                        session_user['profile'] = str(session_user['profile'])
+                        session_user['regdate'] = json.dumps(session_user['regdate'], indent=4, sort_keys=True, default=str)
+                        
+                        request.session['user'] = session_user
+                        return redirect('/')
+                return redirect('/signin?error=1')
+    else:
+        sign_form = SignForm()
+        
+    context = {
+        'signForm': sign_form
+    }
+    return render(request, 'todo/signin.html', context)
 
 @api_view(['GET', 'POST'])
 def signup(request):

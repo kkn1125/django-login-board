@@ -3,9 +3,27 @@
 {% block content %}
 <h1>Sign in</h1>
 <div>
-    <form action="{% url 'signin' %}" method="post">
-        {% bootstrap_form signForm %}
-        <button class="btn btn-info">sign in</button>
+    <form action="{% url 'signin' %}" method="post" novalidate>
+        {% if request.GET.error %}
+            <div class="alert alert-danger">
+                아이디와 비밀번호를 확인해주세요
+            </div>
+        {% endif %}
+        {% if signForm.errors %}
+        <div class="alert alert-danger">
+            {% for field in signForm %}
+            {% if field.errors %}
+            {{field.label}}
+            {{field.errors}}
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div>
+            {% comment %} {% bootstrap_form signForm %} {% endcomment %}
+            {{ signForm.as_p }}
+        </div>
+        <button type="submit" class="btn btn-info">sign in</button>
     </form>
 </div>
 {% endblock %}

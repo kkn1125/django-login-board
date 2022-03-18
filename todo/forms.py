@@ -1,4 +1,5 @@
-from django.forms import DateInput, FileInput, ModelForm
+from django.forms import DateInput, FileInput, ModelForm, PasswordInput, ValidationError
+from django import forms
 from .models import *
 
 class TodoForm(ModelForm):
@@ -28,3 +29,11 @@ class SignForm(ModelForm):
         fields = [
             'email', 'password'
             ]
+        widgets = {
+            'password': PasswordInput(attrs={'type':'password'})
+        }
+    
+    def clean_mail(self):
+        if '@' not in self.cleaned_data['email']:
+            return ValidationError('이메일 형식이 아닙니다.')
+        else: self.cleaned_data['email']

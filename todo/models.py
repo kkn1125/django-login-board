@@ -16,9 +16,9 @@ class Todo(models.Model):
     
 class User(models.Model):
     num = models.AutoField(primary_key=True)
-    id = models.CharField(max_length=50, null=True)
-    email = models.CharField(max_length=500, null=True)
-    password = models.CharField(max_length=50, null=True)
+    id = models.CharField(max_length=50, null=False)
+    email = models.CharField(max_length=500, null=False)
+    password = models.CharField(max_length=50, null=False)
     profile = models.ImageField(upload_to="", null=True, blank=True)
     regdate = models.DateTimeField('created', default=timezone.now, editable=False, null=False, blank=False)
     updates = models.DateTimeField('date published', default=timezone.now, editable=False, null=False, blank=False)
