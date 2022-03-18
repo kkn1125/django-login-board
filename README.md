@@ -27,6 +27,26 @@ def list(request):
 # models.py
 ImageField ...  str(session_user['profile'])
 
+# forms.py
+class UserForm(ModelForm):
+    email = forms.EmailField(required=False)
+    # required 설정
+
+    class Meta:
+        model = User
+        fields = [
+            'email', 'password'
+            ]
+        widgets = {
+            'password': PasswordInput(attrs={'type':'password'})
+        }
+    
+    # cleaned_data 값 filter 작업 할 때
+    def clean_mail(self):
+        if '@' not in self.cleaned_data['email']:
+            return ValidationError('이메일 형식이 아닙니다.')
+        else: self.cleaned_data['email']
+
 # model객체 dict로 변환
 user = User(request.POST)
 user.__dict__

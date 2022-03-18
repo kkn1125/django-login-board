@@ -24,6 +24,8 @@ class UserForm(ModelForm):
         }
         
 class SignForm(ModelForm):
+    email = forms.EmailField(required=False)
+    
     class Meta:
         model = User
         fields = [
